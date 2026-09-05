@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>VIP COLLECTION — Преміальна шкіргалантерея</title>
+    <title>VIP COLLECTION — ULTRA PREMIUM</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet" />
 
     <style>
         /* ============================================================
-                   ГЛОБАЛЬНІ СТИЛІ
+                   ГЛОБАЛЬНІ
                    ============================================================ */
         * {
             margin: 0;
@@ -19,10 +19,10 @@
         }
 
         body {
-            font-family: 'Inter', 'Helvetica Neue', sans-serif;
-            color: #1a1a1a;
-            background: #ffffff;
-            -webkit-font-smoothing: antialiased;
+            font-family: 'Inter', sans-serif;
+            background: #080814;
+            color: #fff;
+            overflow-x: hidden;
             cursor: none;
         }
 
@@ -38,7 +38,7 @@
         }
 
         /* ============================================================
-                   КАСТОМНИЙ КУРСОР (ЗОЛОТИЙ)
+                   КАСТОМНИЙ КУРСОР
                    ============================================================ */
         .cursor {
             position: fixed;
@@ -181,21 +181,24 @@
         }
 
         /* ============================================================
-                   STICKY HEADER
+                   HEADER
                    ============================================================ */
         .site-header {
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-            transition: box-shadow 0.3s ease;
+            background: rgba(8, 8, 20, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             padding: 0 24px;
             height: 72px;
             display: flex;
             align-items: center;
+            transition: box-shadow 0.3s ease;
+        }
+        .site-header.scrolled {
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.3);
         }
 
         .header-inner {
@@ -208,47 +211,64 @@
         }
 
         .header-logo {
-            font-size: 1.6rem;
+            font-size: 1.5rem;
             font-weight: 600;
-            letter-spacing: 2px;
-            color: #1a1a1a;
+            letter-spacing: 3px;
+            color: #fff;
             flex-shrink: 0;
             margin-right: 40px;
         }
         .header-logo span {
-            color: #b89b7b;
+            color: #d4a373;
         }
 
         .header-nav {
             display: flex;
-            gap: 28px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: #2b2b2b;
+            gap: 32px;
+            font-size: 0.85rem;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.6);
+            letter-spacing: 0.5px;
         }
         .header-nav a {
-            transition: color 0.2s;
+            transition: color 0.3s;
+            position: relative;
         }
         .header-nav a:hover {
-            color: #b89b7b;
+            color: #d4a373;
+        }
+        .header-nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #d4a373;
+            transition: width 0.3s;
+        }
+        .header-nav a:hover::after {
+            width: 100%;
         }
 
         .header-actions {
             display: flex;
-            gap: 20px;
-            font-size: 1.15rem;
+            gap: 24px;
+            font-size: 1.1rem;
             align-items: center;
             margin-left: auto;
         }
         .header-actions a {
-            opacity: 0.7;
-            transition: opacity 0.2s;
+            opacity: 0.5;
+            transition: opacity 0.3s;
+            color: #fff;
         }
         .header-actions a:hover {
             opacity: 1;
         }
         .header-actions .cart-icon {
             position: relative;
+            opacity: 0.8;
         }
 
         .menu-toggle {
@@ -257,16 +277,17 @@
             cursor: pointer;
             background: none;
             border: none;
+            color: #fff;
             margin-right: 15px;
         }
 
         /* ============================================================
-                   HERO (3D + ЗОЛОТІ ЛІНІЇ)
+                   HERO (3D)
                    ============================================================ */
         #hero {
             position: relative;
             width: 100vw;
-            height: 90vh;
+            height: 100vh;
             min-height: 600px;
             overflow: hidden;
             background: #080814;
@@ -312,12 +333,56 @@
             opacity: 0;
             animation: fadeUp 1.2s ease 2.4s forwards;
         }
+        .hero-overlay .hero-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 16px;
+            margin-top: 32px;
+            opacity: 0;
+            animation: fadeUp 1.2s ease 3s forwards;
+            pointer-events: auto;
+        }
+        .hero-overlay .btn-primary {
+            background: #d4a373;
+            color: #080814;
+            padding: 14px 40px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            cursor: pointer;
+        }
+        .hero-overlay .btn-primary:hover {
+            background: #c4956a;
+            transform: translateY(-3px);
+            box-shadow: 0 16px 40px rgba(212, 163, 115, 0.2);
+        }
+        .hero-overlay .btn-secondary {
+            background: transparent;
+            color: #fff;
+            padding: 14px 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            font-weight: 500;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: all 0.4s ease;
+            cursor: pointer;
+        }
+        .hero-overlay .btn-secondary:hover {
+            border-color: #d4a373;
+            background: rgba(212, 163, 115, 0.05);
+        }
+
         .hero-overlay .scroll-hint {
-            margin-top: 40px;
+            margin-top: 50px;
             font-size: 0.7rem;
             letter-spacing: 4px;
             color: rgba(255, 255, 255, 0.15);
-            animation: bounceDown 2s ease-in-out infinite 3s;
+            animation: bounceDown 2s ease-in-out infinite 3.5s;
         }
 
         @keyframes fadeUp {
@@ -339,11 +404,113 @@
         }
 
         /* ============================================================
-                   КАТЕГОРІЇ (3 КАРТКИ ЗОЛОТИЙ ХОВЕР)
+                   PRODUCT REVEAL (3D HOTSPOTS)
                    ============================================================ */
-        .categories-section {
+        .section-reveal {
+            min-height: 100vh;
+            padding: 100px 20px;
+            background: #080814;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .section-reveal .reveal-title {
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .section-reveal .reveal-title span {
+            color: #d4a373;
+        }
+        .section-reveal .reveal-sub {
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 2px;
+            font-size: 0.9rem;
+            margin-bottom: 60px;
+            text-align: center;
+        }
+
+        .hotspots-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .hotspot {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 20px;
+            padding: 30px 20px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        .hotspot::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+                        rgba(212, 163, 115, 0.06) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
+        .hotspot:hover {
+            transform: translateY(-8px);
+            border-color: rgba(212, 163, 115, 0.2);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        }
+        .hotspot:hover::before {
+            opacity: 1;
+        }
+        .hotspot .num {
+            font-size: 0.7rem;
+            color: #d4a373;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        .hotspot h3 {
+            font-size: 1.1rem;
+            font-weight: 400;
+            margin: 10px 0 6px;
+            letter-spacing: 1px;
+        }
+        .hotspot p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.3);
+            line-height: 1.5;
+        }
+
+        /* ============================================================
+                   CATEGORIES (PREMIUM)
+                   ============================================================ */
+        .section-categories {
             padding: 90px 0 100px;
-            background: #fcfcfa;
+            background: #0c0c1a;
+        }
+        .section-categories .section-label {
+            text-align: center;
+            font-size: 0.7rem;
+            letter-spacing: 6px;
+            color: rgba(255, 255, 255, 0.2);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+        .section-categories .section-title {
+            text-align: center;
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 50px;
+        }
+        .section-categories .section-title span {
+            color: #d4a373;
         }
 
         .categories-grid {
@@ -351,7 +518,6 @@
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
-
         .category-card {
             position: relative;
             overflow: hidden;
@@ -359,16 +525,14 @@
             display: flex;
             align-items: flex-end;
             cursor: pointer;
-            border-radius: 4px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
-                box-shadow 0.4s ease;
+            border-radius: 8px;
+            transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1),
+                box-shadow 0.5s ease;
         }
         .category-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 20px 60px rgba(212, 163, 115, 0.08);
+            transform: translateY(-8px);
+            box-shadow: 0 30px 80px rgba(212, 163, 115, 0.06);
         }
-
         .category-image {
             position: absolute;
             top: 0;
@@ -377,18 +541,17 @@
             height: 100%;
             background-size: cover;
             background-position: center;
-            transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             will-change: transform;
         }
         .category-card:hover .category-image {
             transform: scale(1.08);
         }
-
         .category-info {
             position: relative;
             z-index: 2;
             padding: 32px 28px;
-            background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, transparent 100%);
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
             width: 100%;
             color: #fff;
         }
@@ -396,19 +559,21 @@
             font-size: 1.6rem;
             font-weight: 400;
             letter-spacing: 4px;
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
         .category-info p {
-            opacity: 0.8;
+            opacity: 0.6;
             font-weight: 300;
-            font-size: 0.95rem;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
         }
         .category-link {
             display: inline-block;
             margin-top: 12px;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             font-weight: 500;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+            letter-spacing: 2px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
             padding-bottom: 4px;
             opacity: 0;
             transform: translateX(-12px);
@@ -420,17 +585,80 @@
         }
 
         /* ============================================================
-                   ТОВАРИ (ЗОЛОТЕ ПІДСВІЧУВАННЯ)
+                   CHOOSE YOUR JOURNEY
                    ============================================================ */
-        .products-section {
-            padding: 90px 0;
-            background: #fff;
+        .section-journey {
+            min-height: 80vh;
+            padding: 90px 20px;
+            background: #080814;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 50px;
         }
-        .products-section.alt-bg {
-            background: #f8f6f4;
+        .section-journey .journey-title {
+            font-size: clamp(2.4rem, 5vw, 4.5rem);
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+        .section-journey .journey-title span {
+            color: #d4a373;
         }
 
-        .section-header {
+        .journey-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            max-width: 1000px;
+            width: 100%;
+        }
+        .journey-card {
+            flex: 1 1 200px;
+            min-width: 160px;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            cursor: pointer;
+            position: relative;
+        }
+        .journey-card:hover {
+            transform: scale(1.06);
+            border-color: #d4a373;
+            box-shadow: 0 0 60px rgba(212, 163, 115, 0.06);
+            background: rgba(212, 163, 115, 0.03);
+        }
+        .journey-card .icon {
+            font-size: 2.8rem;
+            display: block;
+            margin-bottom: 16px;
+        }
+        .journey-card h3 {
+            font-weight: 400;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+        }
+        .journey-card p {
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.25);
+            letter-spacing: 2px;
+            margin-top: 6px;
+            text-transform: uppercase;
+        }
+
+        /* ============================================================
+                   NEW ARRIVALS (золотий ховер)
+                   ============================================================ */
+        .section-products {
+            padding: 90px 0;
+            background: #0c0c1a;
+        }
+        .section-products .section-header {
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
@@ -438,25 +666,25 @@
             flex-wrap: wrap;
             gap: 16px;
         }
-        .section-header h2 {
-            font-size: 2.6rem;
+        .section-products .section-header h2 {
+            font-size: clamp(2rem, 4vw, 3rem);
             font-weight: 300;
-            letter-spacing: -0.5px;
+            letter-spacing: 2px;
         }
-        .section-subtitle {
-            color: #777;
-            margin-top: 6px;
-            font-weight: 300;
+        .section-products .section-header h2 span {
+            color: #d4a373;
         }
-        .view-all {
-            font-weight: 500;
-            border-bottom: 1px solid #ccc;
+        .section-products .section-header .view-all {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             padding-bottom: 4px;
-            transition: border-color 0.3s;
-            font-size: 0.95rem;
+            transition: all 0.3s;
         }
-        .view-all:hover {
-            border-color: #1a1a1a;
+        .section-products .section-header .view-all:hover {
+            color: #d4a373;
+            border-color: #d4a373;
         }
 
         .products-grid {
@@ -464,28 +692,27 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 30px;
         }
-
         .product-card {
             position: relative;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             border-radius: 8px;
             overflow: hidden;
+            cursor: pointer;
         }
         .product-card:hover {
             transform: translateY(-8px);
         }
-
         .product-image-link {
             position: relative;
             display: block;
             overflow: hidden;
             aspect-ratio: 3/4;
-            background: #f0eeeb;
-            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
             transition: box-shadow 0.5s ease;
         }
         .product-card:hover .product-image-link {
-            box-shadow: 0 0 50px rgba(212, 163, 115, 0.08);
+            box-shadow: 0 0 60px rgba(212, 163, 115, 0.04);
         }
         .product-image-link img {
             width: 100%;
@@ -512,39 +739,39 @@
             position: absolute;
             top: 16px;
             left: 16px;
-            background: #1a1a1a;
-            color: #fff;
-            padding: 4px 14px;
+            background: #d4a373;
+            color: #080814;
+            padding: 4px 16px;
             font-size: 0.6rem;
             letter-spacing: 2px;
             font-weight: 600;
             z-index: 10;
             border-radius: 2px;
         }
-
         .product-meta {
             padding: 16px 4px 0;
             position: relative;
         }
         .brand {
-            font-size: 0.75rem;
-            color: #999;
+            font-size: 0.7rem;
+            color: rgba(255, 255, 255, 0.3);
             text-transform: uppercase;
-            letter-spacing: 1.5px;
+            letter-spacing: 2px;
             font-weight: 500;
         }
         .product-name {
             font-size: 1rem;
             font-weight: 400;
             margin: 4px 0 6px;
-            color: #1a1a1a;
+            color: #fff;
         }
         .product-price {
             font-weight: 600;
             font-size: 1.1rem;
+            color: #d4a373;
         }
         .product-price del {
-            color: #b0b0b0;
+            color: rgba(255, 255, 255, 0.2);
             font-weight: 300;
             margin-right: 10px;
             font-size: 0.9rem;
@@ -557,213 +784,16 @@
             border: none;
             font-size: 1.2rem;
             cursor: pointer;
-            opacity: 0.4;
+            opacity: 0.2;
             transition: opacity 0.3s;
-            color: #1a1a1a;
+            color: #fff;
         }
         .product-card:hover .btn-wishlist {
-            opacity: 1;
+            opacity: 0.6;
         }
-
-        /* ============================================================
-                   EDITORIAL / ШКІРЯНА КОЛЕКЦІЯ
-                   ============================================================ */
-        .editorial-block {
-            height: 65vh;
-            min-height: 420px;
-            display: flex;
-            align-items: center;
-            position: relative;
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-            overflow: hidden;
-        }
-        .editorial-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.35);
-        }
-        .editorial-content {
-            position: relative;
-            z-index: 2;
-            color: #fff;
-            max-width: 600px;
-            padding: 0 24px;
-        }
-        .editorial-content h2 {
-            font-size: clamp(2.4rem, 5vw, 4rem);
-            font-weight: 300;
-            margin-bottom: 16px;
-            line-height: 1.15;
-        }
-        .editorial-text {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            font-weight: 300;
-            margin-bottom: 32px;
-            letter-spacing: 0.5px;
-        }
-
-        .btn-primary {
-            background: #fff;
-            color: #1a1a1a;
-            padding: 16px 44px;
-            border: none;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            display: inline-block;
-            font-size: 0.95rem;
-            cursor: pointer;
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 16px 30px rgba(0, 0, 0, 0.15);
-            background: #f0f0f0;
-        }
-        .btn-large {
-            padding: 18px 56px;
-            font-size: 1rem;
-        }
-
-        .leather-collection {
-            height: 60vh;
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            position: relative;
-            background-size: cover;
-            background-attachment: fixed;
-            background-position: center;
-        }
-        .leather-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(10, 10, 10, 0.55);
-        }
-        .leather-content {
-            position: relative;
-            z-index: 2;
-            color: #fff;
-            padding: 0 24px;
-        }
-        .leather-title {
-            font-size: clamp(2.6rem, 5vw, 4.2rem);
-            font-weight: 300;
-            text-shadow: 0 4px 40px rgba(0, 0, 0, 0.4);
-            line-height: 1.2;
-        }
-        .btn-outline-light {
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            color: #fff;
-            padding: 16px 48px;
-            display: inline-block;
-            margin-top: 32px;
-            font-weight: 500;
-            letter-spacing: 0.5px;
-            transition: all 0.3s ease;
-            font-size: 0.95rem;
-        }
-        .btn-outline-light:hover {
-            background: #fff;
-            color: #1a1a1a;
-            border-color: #fff;
-        }
-
-        /* ============================================================
-                   ПЕРЕВАГИ
-                   ============================================================ */
-        .advantages-section {
-            padding: 70px 0;
-            background: #fafaf8;
-        }
-        .advantages-list {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 30px;
-            list-style: none;
-        }
-        .advantages-list li {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-        .advantages-list strong {
-            font-weight: 600;
-            font-size: 1.05rem;
-            margin-bottom: 4px;
-        }
-        .advantages-list span {
-            color: #777;
-            font-weight: 300;
-        }
-
-        /* ============================================================
-                   FOOTER
-                   ============================================================ */
-        .site-footer {
-            background: #1a1a1a;
-            color: rgba(255, 255, 255, 0.7);
-            padding: 60px 24px 30px;
-        }
-        .footer-grid {
-            max-width: 1280px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 40px;
-            margin-bottom: 40px;
-        }
-        .footer-grid h4 {
-            color: #fff;
-            font-weight: 500;
-            margin-bottom: 16px;
-            font-size: 0.95rem;
-            letter-spacing: 0.5px;
-        }
-        .footer-grid ul {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .footer-grid ul a {
-            font-weight: 300;
-            font-size: 0.9rem;
-            transition: color 0.2s;
-        }
-        .footer-grid ul a:hover {
-            color: #fff;
-        }
-        .footer-bottom {
-            max-width: 1280px;
-            margin: 0 auto;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
-            padding-top: 24px;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 12px;
-            font-size: 0.85rem;
-            font-weight: 300;
-        }
-        .footer-bottom a {
-            margin-left: 20px;
-        }
-        .footer-bottom a:hover {
-            color: #fff;
+        .btn-wishlist:hover {
+            opacity: 1 !important;
+            color: #d4a373;
         }
 
         /* ============================================================
@@ -793,16 +823,13 @@
         }
 
         /* ============================================================
-                   АДАПТИВНІСТЬ
+                   АДАПТИВ
                    ============================================================ */
         @media (max-width: 1024px) {
             .products-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
             .categories-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .footer-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
         }
@@ -824,15 +851,17 @@
             .hero-overlay {
                 bottom: 10vh;
             }
-            .btn-primary {
-                padding: 14px 30px;
-                font-size: 0.9rem;
+            .hotspots-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
             }
-            .leather-collection,
-            .editorial-block {
-                background-attachment: scroll;
-                height: 45vh;
-                min-height: 320px;
+            .journey-grid {
+                flex-direction: column;
+                align-items: center;
+            }
+            .journey-card {
+                width: 100%;
+                max-width: 320px;
             }
         }
 
@@ -845,37 +874,25 @@
                 grid-template-columns: 1fr 1fr;
                 gap: 14px;
             }
-            .advantages-list {
+            .hotspots-grid {
                 grid-template-columns: 1fr 1fr;
-                gap: 20px;
-            }
-            .footer-grid {
-                grid-template-columns: 1fr;
-                gap: 30px;
-            }
-            .footer-bottom {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-            .footer-bottom a {
-                margin: 0 10px;
-            }
-            .section-header h2 {
-                font-size: 2rem;
             }
             .header-logo {
-                font-size: 1.3rem;
+                font-size: 1.2rem;
                 margin-right: 15px;
             }
-            .editorial-content h2 {
-                font-size: 2rem;
-            }
-            .leather-title {
-                font-size: 2rem;
-            }
             .hero-overlay h1 {
-                font-size: 2.4rem;
+                font-size: 2.2rem;
+            }
+            .hero-overlay .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-overlay .btn-primary,
+            .hero-overlay .btn-secondary {
+                width: 100%;
+                max-width: 280px;
+                text-align: center;
             }
         }
     </style>
@@ -883,7 +900,7 @@
 <body>
 
     <!-- ============================================================
-    КАСТОМНИЙ КУРСОР
+    КУРСОР
     ============================================================ -->
     <div class="cursor" id="cursor"></div>
     <div class="cursor-dot" id="cursorDot"></div>
@@ -910,7 +927,7 @@
             <a href="#" class="header-logo">VIP<span>.ua</span></a>
             <nav class="header-nav">
                 <a href="#">Валізи</a>
-                <a href="#">Сумки та рюкзаки</a>
+                <a href="#">Сумки</a>
                 <a href="#">Галантерея</a>
                 <a href="#">Новинки</a>
                 <a href="#">Розпродаж</a>
@@ -925,44 +942,85 @@
     </header>
 
     <!-- ============================================================
-    HERO (3D + ЗОЛОТІ ЛІНІЇ)
+    HERO (3D)
     ============================================================ -->
     <section id="hero">
         <div id="three-canvas"></div>
         <div class="hero-overlay">
             <h1>VIP <span>COLLECTION</span></h1>
-            <p>Move Differently.</p>
+            <p>Речі, які подорожують разом з вами.</p>
+            <div class="hero-buttons">
+                <button class="btn-primary" onclick="alert('✨ Ласкаво просимо до VIP COLLECTION!')">Переглянути колекцію</button>
+                <button class="btn-secondary" onclick="alert('🧳 Валізи VIP — надійність у кожній деталі.')">Валізи</button>
+            </div>
             <div class="scroll-hint">↓ SCROLL TO EXPLORE ↓</div>
         </div>
     </section>
 
     <!-- ============================================================
-    КАТЕГОРІЇ
+    PRODUCT REVEAL (HOTSPOTS)
     ============================================================ -->
-    <section class="categories-section">
+    <section class="section-reveal">
+        <h2 class="reveal-title">The <span>Product</span></h2>
+        <p class="reveal-sub">Наведіть на деталь, щоб дізнатися більше</p>
+        <div class="hotspots-grid">
+            <div class="hotspot" data-detail="Матеріал преміум-класу">
+                <div class="num">01</div>
+                <h3>MATERIAL</h3>
+                <p>Міцний полікарбонат з матовим покриттям</p>
+            </div>
+            <div class="hotspot" data-detail="Безшумний хід">
+                <div class="num">02</div>
+                <h3>MOTION</h3>
+                <p>Безшумні колеса з подвійним підшипником</p>
+            </div>
+            <div class="hotspot" data-detail="Зручне керування">
+                <div class="num">03</div>
+                <h3>CONTROL</h3>
+                <p>Алюмінієва телескопічна ручка</p>
+            </div>
+            <div class="hotspot" data-detail="Надійний захист">
+                <div class="num">04</div>
+                <h3>SECURITY</h3>
+                <p>TSA замок з кодовим захистом</p>
+            </div>
+            <div class="hotspot" data-detail="Продуманий простір">
+                <div class="num">05</div>
+                <h3>SPACE</h3>
+                <p>Організація з компресійними ременями</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+    CATEGORIES (PREMIUM)
+    ============================================================ -->
+    <section class="section-categories">
         <div class="container">
+            <p class="section-label">Категорії</p>
+            <h2 class="section-title">Обирайте <span>своє</span></h2>
             <div class="categories-grid">
                 <a href="#" class="category-card">
                     <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1607552384479-9f2f21dd4d78?w=800&q=80');"></div>
                     <div class="category-info">
-                        <h3>ВАЛІЗИ</h3>
-                        <p>Для подорожей</p>
+                        <h3>TRAVEL</h3>
+                        <p>Валізи для будь-якої подорожі</p>
                         <span class="category-link">Переглянути →</span>
                     </div>
                 </a>
                 <a href="#" class="category-card">
                     <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=800&q=80');"></div>
                     <div class="category-info">
-                        <h3>СУМКИ &amp; РЮКЗАКИ</h3>
-                        <p>Для міста та подорожей</p>
+                        <h3>EVERYDAY</h3>
+                        <p>Сумки та рюкзаки на кожен день</p>
                         <span class="category-link">Переглянути →</span>
                     </div>
                 </a>
                 <a href="#" class="category-card">
                     <div class="category-image" style="background-image: url('https://images.unsplash.com/photo-1601758063897-1d9b4e4f13c0?w=800&q=80');"></div>
                     <div class="category-info">
-                        <h3>ГАЛАНТЕРЕЯ</h3>
-                        <p>Аксесуари на кожен день</p>
+                        <h3>LEATHER</h3>
+                        <p>Галантерея з натуральної шкіри</p>
                         <span class="category-link">Переглянути →</span>
                     </div>
                 </a>
@@ -971,16 +1029,43 @@
     </section>
 
     <!-- ============================================================
-    НОВИНКИ
+    CHOOSE YOUR JOURNEY
     ============================================================ -->
-    <section class="products-section">
+    <section class="section-journey">
+        <h2 class="journey-title">Where are you <span>going</span>?</h2>
+        <div class="journey-grid">
+            <div class="journey-card" data-journey="weekend">
+                <span class="icon">🌆</span>
+                <h3>WEEKEND</h3>
+                <p>Коротка подорож</p>
+            </div>
+            <div class="journey-card" data-journey="business">
+                <span class="icon">🏢</span>
+                <h3>BUSINESS</h3>
+                <p>Відрядження</p>
+            </div>
+            <div class="journey-card" data-journey="longtrip">
+                <span class="icon">🌍</span>
+                <h3>LONG TRIP</h3>
+                <p>Довга подорож</p>
+            </div>
+        </div>
+        <button class="btn-primary" style="background:#d4a373;color:#080814;padding:14px 48px;border:none;font-weight:600;letter-spacing:2px;font-size:0.85rem;cursor:pointer;transition:all 0.3s;margin-top:20px;" onmouseover="this.style.background='#c4956a'" onmouseout="this.style.background='#d4a373'" onclick="alert('🔍 Знайдіть свій ідеальний варіант разом із VIP!')">
+                ЗНАЙТИ СВІЙ ВАРІАНТ
+            </button>
+    </section>
+
+    <!-- ============================================================
+    NEW ARRIVALS
+    ============================================================ -->
+    <section class="section-products">
         <div class="container">
             <div class="section-header reveal">
                 <div>
-                    <h2>Новинки</h2>
-                    <p class="section-subtitle">Нові моделі, які щойно з'явилися у VIP.</p>
+                    <h2>New <span>Arrivals</span></h2>
+                    <p style="color:rgba(255,255,255,0.2);font-weight:300;font-size:0.9rem;margin-top:4px;">Нові моделі, які щойно з'явилися</p>
                 </div>
-                <a href="#" class="view-all">Дивитися всі →</a>
+                <a href="#" class="view-all">Усі новинки →</a>
             </div>
             <div class="products-grid">
                 <div class="product-card reveal reveal-delay-1">
@@ -1040,174 +1125,6 @@
     </section>
 
     <!-- ============================================================
-    EDITORIAL
-    ============================================================ -->
-    <section class="editorial-block" style="background-image: url('https://images.unsplash.com/photo-1499951360447-b19be8fe80f5?w=1600&q=80');">
-        <div class="editorial-overlay"></div>
-        <div class="editorial-content container reveal">
-            <h2>Подорож починається <br>з деталей.</h2>
-            <p class="editorial-text">Колекція, створена для тих, хто цінує стиль у кожному міліметрі.</p>
-            <a href="#" class="btn-primary btn-large">Колекція Travel →</a>
-        </div>
-    </section>
-
-    <!-- ============================================================
-    ПОПУЛЯРНІ
-    ============================================================ -->
-    <section class="products-section alt-bg">
-        <div class="container">
-            <div class="section-header reveal">
-                <div>
-                    <h2>Вибір наших клієнтів</h2>
-                    <p class="section-subtitle">Найпопулярніші моделі цього сезону.</p>
-                </div>
-                <a href="#" class="view-all">Всі популярні →</a>
-            </div>
-            <div class="products-grid">
-                <div class="product-card reveal reveal-delay-1">
-                    <a href="#" class="product-image-link">
-                        <img src="https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400&h=500&fit=crop&q=80" alt="Рюкзак">
-                        <img class="product-image-hover" src="https://images.unsplash.com/photo-1607552384479-9f2f21dd4d78?w=400&h=500&fit=crop&q=80" alt="Рюкзак інший">
-                    </a>
-                    <div class="product-meta">
-                        <span class="brand">VIP Travel</span>
-                        <h3 class="product-name">Рюкзак для ноутбука 15"</h3>
-                        <div class="product-price">4 290 ₴</div>
-                        <button class="btn-wishlist" aria-label="Додати в обране">♡</button>
-                    </div>
-                </div>
-                <div class="product-card reveal reveal-delay-2">
-                    <a href="#" class="product-image-link">
-                        <img src="https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=500&fit=crop&q=80" alt="Сумка">
-                        <img class="product-image-hover" src="https://images.unsplash.com/photo-1566150905458-1bf1fc113f0d?w=400&h=500&fit=crop&q=80" alt="Сумка інший">
-                    </a>
-                    <div class="product-meta">
-                        <span class="brand">VIP Leather</span>
-                        <h3 class="product-name">Сумка Tote з натуральної шкіри</h3>
-                        <div class="product-price">7 890 ₴</div>
-                        <button class="btn-wishlist" aria-label="Додати в обране">♡</button>
-                    </div>
-                </div>
-                <div class="product-card reveal reveal-delay-3">
-                    <a href="#" class="product-image-link">
-                        <img src="https://images.unsplash.com/photo-1601924971179-d6f38f24ce3d?w=400&h=500&fit=crop&q=80" alt="Портфель">
-                        <img class="product-image-hover" src="https://images.unsplash.com/photo-1601758063897-1d9b4e4f13c0?w=400&h=500&fit=crop&q=80" alt="Портфель інший">
-                    </a>
-                    <div class="product-meta">
-                        <span class="brand">VIP Business</span>
-                        <h3 class="product-name">Портфель-дипломат класичний</h3>
-                        <div class="product-price">9 200 ₴ <del>11 500 ₴</del></div>
-                        <button class="btn-wishlist" aria-label="Додати в обране">♡</button>
-                    </div>
-                </div>
-                <div class="product-card reveal reveal-delay-4">
-                    <a href="#" class="product-image-link">
-                        <img src="https://images.unsplash.com/photo-1559588358-2f9bd1d49c22?w=400&h=500&fit=crop&q=80" alt="Валіза велика">
-                        <img class="product-image-hover" src="https://images.unsplash.com/photo-1607552384479-9f2f21dd4d78?w=400&h=500&fit=crop&q=80" alt="Валіза велика інший">
-                    </a>
-                    <div class="product-meta">
-                        <span class="brand">VIP Travel</span>
-                        <h3 class="product-name">Валіза 75 см (велика)</h3>
-                        <div class="product-price">6 390 ₴</div>
-                        <button class="btn-wishlist" aria-label="Додати в обране">♡</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ============================================================
-    ШКІРЯНА КОЛЕКЦІЯ
-    ============================================================ -->
-    <section class="leather-collection" style="background-image: url('https://images.unsplash.com/photo-1565372195450-d10b0f10b2caa?w=1600&q=80');">
-        <div class="leather-overlay"></div>
-        <div class="leather-content reveal">
-            <h2 class="leather-title">Натуральна шкіра.<br>Позачасовий стиль.</h2>
-            <a href="#" class="btn-outline-light">Переглянути колекцію →</a>
-        </div>
-    </section>
-
-    <!-- ============================================================
-    ПЕРЕВАГИ
-    ============================================================ -->
-    <section class="advantages-section">
-        <div class="container">
-            <ul class="advantages-list">
-                <li class="reveal reveal-delay-1">
-                    <strong>🚚 Швидка доставка</strong>
-                    <span>Відправляємо по Україні</span>
-                </li>
-                <li class="reveal reveal-delay-2">
-                    <strong>↩️ Зручне повернення</strong>
-                    <span>Прості умови повернення</span>
-                </li>
-                <li class="reveal reveal-delay-3">
-                    <strong>✓ Оригінальні товари</strong>
-                    <span>Гарантія якості</span>
-                </li>
-                <li class="reveal reveal-delay-4">
-                    <strong>💳 Зручна оплата</strong>
-                    <span>Безпечна онлайн-оплата</span>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <!-- ============================================================
-    FOOTER
-    ============================================================ -->
-    <footer class="site-footer">
-        <div class="footer-grid">
-            <div>
-                <h4>Покупцям</h4>
-                <ul>
-                    <li><a href="#">Доставка</a></li>
-                    <li><a href="#">Оплата</a></li>
-                    <li><a href="#">Повернення</a></li>
-                    <li><a href="#">Гарантія</a></li>
-                    <li><a href="#">FAQ</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Магазин</h4>
-                <ul>
-                    <li><a href="#">Валізи</a></li>
-                    <li><a href="#">Сумки та рюкзаки</a></li>
-                    <li><a href="#">Галантерея</a></li>
-                    <li><a href="#">Новинки</a></li>
-                    <li><a href="#">Розпродаж</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Про VIP</h4>
-                <ul>
-                    <li><a href="#">Про нас</a></li>
-                    <li><a href="#">Контакти</a></li>
-                    <li><a href="#">Магазини</a></li>
-                    <li><a href="#">Блог</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4>Контакти</h4>
-                <ul>
-                    <li><a href="tel:+380441234567">+38 (044) 123-45-67</a></li>
-                    <li><a href="mailto:info@vip.ua">info@vip.ua</a></li>
-                    <li><a href="#">Instagram</a></li>
-                    <li><a href="#">Facebook</a></li>
-                    <li>Пн–Пт: 10:00 – 20:00</li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <span>© VIP 2026</span>
-            <div>
-                <a href="#">Політика конфіденційності</a>
-                <a href="#">Публічна оферта</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- ============================================================
     THREE.JS
     ============================================================ -->
     <script type="importmap">
@@ -1222,10 +1139,9 @@
     ГОЛОВНИЙ СКРИПТ
     ============================================================ -->
     <script type="module">
-        // ---------- ІМПОРТИ ----------
         import * as THREE from 'three';
 
-        // ---------- 1. КАСТОМНИЙ КУРСОР ----------
+        // ---------- 1. КУРСОР ----------
         const cursor = document.getElementById('cursor');
         const cursorDot = document.getElementById('cursorDot');
         let mouseX = 0,
@@ -1239,7 +1155,7 @@
             mouseX = e.clientX;
             mouseY = e.clientY;
             const target = e.target.closest(
-                '.product-card, .category-card, .btn-primary, .btn-outline-light, .view-all, .header-nav a, .cart-icon, .btn-wishlist'
+                '.product-card, .category-card, .hotspot, .journey-card, .btn-primary, .btn-secondary, .view-all, .header-nav a, .cart-icon, .btn-wishlist'
             );
             if (target) {
                 cursor.classList.add('active');
@@ -1283,7 +1199,7 @@
         }
         updatePreloader();
 
-        // ---------- 3. THREE.JS 3D СЦЕНА ----------
+        // ---------- 3. THREE.JS ----------
         let scene, camera, renderer, suitcase, orbitLine;
 
         function initThree() {
@@ -1315,15 +1231,11 @@
             dirLight.castShadow = true;
             scene.add(dirLight);
 
-            const fillLight = new THREE.DirectionalLight(0x4466ff, 0.5);
-            fillLight.position.set(-3, 1, -4);
-            scene.add(fillLight);
-
             const goldLight = new THREE.PointLight(0xd4a373, 1.2, 10);
             goldLight.position.set(0, -2, 2);
             scene.add(goldLight);
 
-            // ---------- СТВОРЮЄМО 3D ВАЛІЗУ ----------
+            // ---------- ВАЛІЗА ----------
             const group = new THREE.Group();
 
             const bodyMat = new THREE.MeshStandardMaterial({
@@ -1391,7 +1303,7 @@
             scene.add(group);
             suitcase = group;
 
-            // ---------- ЗОЛОТІ ОРБІТАЛЬНІ ЛІНІЇ ----------
+            // ---------- ЗОЛОТІ ЛІНІЇ ----------
             const points = [];
             const radius = 1.8;
             for (let i = 0; i <= 64; i++) {
@@ -1406,8 +1318,7 @@
             const lineMat = new THREE.LineBasicMaterial({
                 color: 0xd4a373,
                 transparent: true,
-                opacity: 0.15,
-                linewidth: 1
+                opacity: 0.12
             });
             orbitLine = new THREE.Line(lineGeo, lineMat);
             scene.add(orbitLine);
@@ -1423,7 +1334,7 @@
                 goldLight.position.z = 2 + x * 0.5;
             });
 
-            // ---------- АНІМАЦІЙНИЙ ЦИКЛ ----------
+            // ---------- АНІМАЦІЯ ----------
             function animate() {
                 requestAnimationFrame(animate);
 
@@ -1441,7 +1352,6 @@
             }
             animate();
 
-            // ---------- АДАПТИВ ----------
             window.addEventListener('resize', () => {
                 const w = container.clientWidth;
                 const h = container.clientHeight;
@@ -1453,18 +1363,16 @@
             console.log('👑 VIP COLLECTION 3D завантажено!');
         }
 
-        // ---------- 4. SCROLL REVEAL + STICKY HEADER ----------
+        // ---------- 4. SCROLL REVEAL ----------
         document.addEventListener('DOMContentLoaded', function() {
             const header = document.getElementById('siteHeader');
-            if (header) {
-                window.addEventListener('scroll', function() {
-                    if (window.scrollY > 50) {
-                        header.style.boxShadow = '0 4px 30px rgba(0,0,0,0.06)';
-                    } else {
-                        header.style.boxShadow = 'none';
-                    }
-                }, { passive: true });
-            }
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            }, { passive: true });
 
             const revealElements = document.querySelectorAll('.reveal');
             const observer = new IntersectionObserver((entries) => {
@@ -1473,19 +1381,13 @@
                         entry.target.classList.add('visible');
                     }
                 });
-            }, {
-                threshold: 0.15,
-                rootMargin: '0px 0px -50px 0px'
-            });
+            }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
 
-            revealElements.forEach(el => {
-                observer.observe(el);
-            });
+            revealElements.forEach(el => observer.observe(el));
 
             setTimeout(() => {
                 revealElements.forEach(el => {
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < window.innerHeight - 100) {
+                    if (el.getBoundingClientRect().top < window.innerHeight - 100) {
                         el.classList.add('visible');
                     }
                 });
@@ -1506,12 +1408,11 @@
                         nav.style.top = '72px';
                         nav.style.left = '0';
                         nav.style.width = '100%';
-                        nav.style.background = 'rgba(255,255,255,0.98)';
-                        nav.style.backdropFilter = 'blur(12px)';
-                        nav.style.padding = '24px';
-                        nav.style.gap = '16px';
-                        nav.style.borderBottom = '1px solid #eee';
-                        nav.style.boxShadow = '0 20px 40px rgba(0,0,0,0.05)';
+                        nav.style.background = 'rgba(8,8,20,0.98)';
+                        nav.style.backdropFilter = 'blur(16px)';
+                        nav.style.padding = '30px 24px';
+                        nav.style.gap = '18px';
+                        nav.style.borderBottom = '1px solid rgba(255,255,255,0.03)';
                     }
                 });
 
@@ -1532,9 +1433,8 @@
                         nav.style.background = 'transparent';
                         nav.style.backdropFilter = 'none';
                         nav.style.padding = '0';
-                        nav.style.gap = '28px';
+                        nav.style.gap = '32px';
                         nav.style.borderBottom = 'none';
-                        nav.style.boxShadow = 'none';
                     } else {
                         if (nav.style.display !== 'flex') {
                             nav.style.display = 'none';
@@ -1543,29 +1443,44 @@
                 });
             }
 
-            // ---------- ДИНАМІЧНЕ СВІТЛО НА КАРТКАХ ----------
-            document.querySelectorAll('.product-card, .category-card').forEach(el => {
+            // ---------- ДИНАМІЧНЕ СВІТЛО ----------
+            document.querySelectorAll('.hotspot, .product-card, .category-card, .journey-card').forEach(el => {
                 el.addEventListener('mousemove', (e) => {
                     const rect = el.getBoundingClientRect();
-                    const x = ((e.clientX - rect.left) / rect.width) * 100;
-                    const y = ((e.clientY - rect.top) / rect.height) * 100;
-                    el.style.setProperty('--mx', x + '%');
-                    el.style.setProperty('--my', y + '%');
+                    el.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+                    el.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
                 });
             });
 
-            // ---------- КЛІК НА ТОВАР (ІНТЕРАКТИВ) ----------
-            document.querySelectorAll('.product-card').forEach((card) => {
-                card.addEventListener('click', () => {
-                    const name = card.querySelector('.product-name')?.innerText || 'товар';
-                    card.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-                    card.style.transform = 'scale(1.08)';
-                    card.style.boxShadow = '0 0 60px rgba(212,163,115,0.15)';
+            // ---------- КЛІК НА ТОВАР ----------
+            document.querySelectorAll('.product-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.closest('.btn-wishlist')) return;
+                    const name = this.querySelector('.product-name')?.innerText || 'товар';
+                    this.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    this.style.transform = 'scale(1.06)';
+                    this.style.boxShadow = '0 0 60px rgba(212,163,115,0.08)';
                     setTimeout(() => {
-                        card.style.transform = '';
-                        card.style.boxShadow = '';
+                        this.style.transform = '';
+                        this.style.boxShadow = '';
                     }, 400);
                     alert(`✨ VIP обрано: ${name}`);
+                });
+            });
+
+            // ---------- JOURNEY КАРТКИ ----------
+            document.querySelectorAll('.journey-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    const title = this.querySelector('h3')?.innerText || '';
+                    alert(`🌍 Ви обрали: ${title}. Знайдіть ідеальний варіант у VIP!`);
+                });
+            });
+
+            // ---------- HOTSPOT ----------
+            document.querySelectorAll('.hotspot').forEach(el => {
+                el.addEventListener('click', function() {
+                    const detail = this.getAttribute('data-detail') || 'Деталь';
+                    alert(`🔍 ${detail}`);
                 });
             });
         });
