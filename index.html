@@ -1,513 +1,935 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VIP.ua — Преміум 3D Бутик</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VIP COLLECTION — ULTRA PREMIUM</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,500;14..32,700&display=swap" rel="stylesheet" />
+
   <style>
-    /* ===== ГЛОБАЛЬНІ СТИЛІ ===== */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    /* ============================================
+       ГЛОБАЛЬНІ СТИЛІ
+    ============================================ */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: 'Segoe UI', sans-serif;
-      background: #0a0a0a;
+      font-family: 'Inter', sans-serif;
+      background: #080814;
       color: #fff;
       overflow-x: hidden;
-      cursor: default;
+      cursor: none;
     }
 
-    /* ===== 3D КОНТЕЙНЕР (фон) ===== */
-    #three-canvas {
+    /* ============================================
+       КАСТОМНИЙ КУРСОР
+    ============================================ */
+    .cursor {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none; /* щоб кліки проходили крізь фон */
+      width: 40px;
+      height: 40px;
+      border: 1.5px solid rgba(212, 163, 115, 0.6);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s, height 0.3s, border-color 0.3s, background 0.3s;
+      mix-blend-mode: difference;
+      will-change: transform;
+    }
+    .cursor-dot {
+      position: fixed;
+      width: 6px;
+      height: 6px;
+      background: #d4a373;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+      transition: background 0.3s;
+      will-change: transform;
+    }
+    .cursor.active {
+      width: 80px;
+      height: 80px;
+      border-color: #d4a373;
+      background: rgba(212, 163, 115, 0.08);
+    }
+    .cursor-dot.active {
+      background: #fff;
     }
 
-    /* ===== ОСНОВНИЙ КОНТЕНТ ===== */
-    .app {
-      position: relative;
-      z-index: 1;
-      min-height: 100vh;
-      padding: 40px 20px;
+    /* ============================================
+       PRELOADER
+    ============================================ */
+    #preloader {
+      position: fixed;
+      inset: 0;
+      background: #080814;
       display: flex;
       flex-direction: column;
       align-items: center;
-      backdrop-filter: blur(2px);
-    }
-
-    /* ===== ЗАГОЛОВОК ===== */
-    .hero {
-      text-align: center;
-      margin-bottom: 60px;
-      animation: fadeDown 1.2s ease-out;
-    }
-    .hero h1 {
-      font-size: clamp(2.5rem, 8vw, 5rem);
-      font-weight: 300;
-      letter-spacing: 8px;
-      text-shadow: 0 0 40px rgba(180, 130, 80, 0.3);
-    }
-    .hero h1 span {
-      font-weight: 700;
-      background: linear-gradient(135deg, #d4a373, #b8860b);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .hero p {
-      font-size: 1.2rem;
-      opacity: 0.7;
-      letter-spacing: 4px;
-      margin-top: 10px;
-    }
-
-    /* ===== КАТЕГОРІЇ ===== */
-    .categories {
-      display: flex;
-      flex-wrap: wrap;
       justify-content: center;
-      gap: 30px;
-      margin-bottom: 70px;
-      animation: fadeUp 1s ease-out 0.3s both;
+      z-index: 10000;
+      transition: opacity 1.2s ease, visibility 1.2s ease;
     }
-    .category-card {
-      width: 180px;
-      padding: 25px 15px;
-      background: rgba(255,255,255,0.04);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 24px;
-      text-align: center;
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    .category-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), 
-                  rgba(255,215,140,0.15) 0%, transparent 60%);
+    #preloader.hidden {
       opacity: 0;
-      transition: opacity 0.5s;
+      visibility: hidden;
       pointer-events: none;
     }
-    .category-card:hover {
-      transform: translateY(-12px) scale(1.04);
-      border-color: rgba(212, 163, 115, 0.5);
-      box-shadow: 0 20px 60px rgba(212, 163, 115, 0.15);
-    }
-    .category-card:hover::before { opacity: 1; }
-    .category-card .icon {
-      font-size: 3.5rem;
-      display: block;
-      margin-bottom: 12px;
-      filter: drop-shadow(0 0 15px rgba(212, 163, 115, 0.2));
-    }
-    .category-card h3 {
-      font-weight: 400;
-      letter-spacing: 2px;
-      font-size: 1.1rem;
-    }
-    .category-card .sub {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 12px;
-      flex-wrap: wrap;
-    }
-    .category-card .sub span {
-      background: rgba(255,255,255,0.06);
-      padding: 4px 12px;
-      border-radius: 30px;
-      font-size: 0.7rem;
-      letter-spacing: 1px;
-      border: 1px solid rgba(255,255,255,0.05);
-      transition: 0.3s;
-    }
-    .category-card .sub span:hover {
-      background: rgba(212, 163, 115, 0.2);
-      border-color: #d4a373;
-    }
-
-    /* ===== СІТКА ТОВАРІВ ===== */
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 30px;
-      max-width: 1200px;
-      width: 100%;
-      animation: fadeUp 1s ease-out 0.6s both;
-    }
-
-    .product-card {
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(8px);
-      border-radius: 28px;
-      padding: 20px 15px 25px;
-      border: 1px solid rgba(255,255,255,0.06);
-      transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-      cursor: pointer;
+    .preloader-logo {
+      font-size: clamp(4rem, 12vw, 8rem);
+      font-weight: 300;
+      letter-spacing: 12px;
+      color: #fff;
       position: relative;
-      text-align: center;
-      overflow: hidden;
     }
-    .product-card::after {
+    .preloader-logo span {
+      color: #d4a373;
+      text-shadow: 0 0 60px rgba(212, 163, 115, 0.3);
+    }
+    .preloader-logo .glow-line {
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #d4a373, #b8860b, transparent);
+      animation: lineGrow 2.4s ease-in-out forwards;
+    }
+    .preloader-sub {
+      font-size: clamp(0.7rem, 1.2vw, 1rem);
+      letter-spacing: 8px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 20px;
+      text-transform: uppercase;
+    }
+    .preloader-bar {
+      width: 200px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      margin-top: 40px;
+      overflow: hidden;
+      position: relative;
+    }
+    .preloader-bar::after {
       content: '';
       position: absolute;
-      inset: 0;
-      border-radius: 28px;
-      padding: 1px;
-      background: conic-gradient(from var(--angle, 0deg), 
-                  transparent 0%, rgba(212,163,115,0.3) 30%, transparent 60%);
-      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events: none;
-      transition: all 1s;
+      left: -100%;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, #d4a373, transparent);
+      animation: barSlide 2s ease-in-out forwards;
     }
-    .product-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      background: rgba(255,255,255,0.07);
-      box-shadow: 0 30px 80px rgba(0,0,0,0.6), 0 0 60px rgba(212,163,115,0.05);
+    .preloader-percent {
+      font-size: 0.7rem;
+      letter-spacing: 2px;
+      color: rgba(255, 255, 255, 0.2);
+      margin-top: 12px;
+      font-variant-numeric: tabular-nums;
     }
-    .product-card:hover::after {
-      --angle: 360deg;
-      transition: all 3s linear;
+
+    @keyframes lineGrow {
+      0% { width: 0; opacity: 0; }
+      60% { width: 100%; opacity: 1; }
+      100% { width: 100%; opacity: 0.3; }
     }
-    .product-card .emoji {
-      font-size: 4.5rem;
-      display: block;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 10px 30px rgba(0,0,0,0.5));
-      transition: 0.5s;
+    @keyframes barSlide {
+      0% { left: -100%; }
+      100% { left: 100%; }
     }
-    .product-card:hover .emoji {
-      transform: scale(1.1) rotate(-3deg);
+
+    /* ============================================
+      HERO
+    ============================================ */
+    #hero {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #080814;
     }
-    .product-card h4 {
-      font-weight: 300;
-      letter-spacing: 1px;
-      font-size: 1rem;
-      margin-bottom: 6px;
-    }
-    .product-card .price {
-      color: #d4a373;
-      font-size: 1.2rem;
-      font-weight: 600;
-    }
-    /* Динамічне світло на картці */
-    .product-card .glow {
+
+    /* 3D канвас */
+    #three-canvas {
       position: absolute;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), 
-                  rgba(212,163,115,0.08) 0%, transparent 70%);
+      z-index: 1;
+    }
+
+    /* Оверлей текст */
+    .hero-overlay {
+      position: absolute;
+      bottom: 15vh;
+      left: 0;
+      width: 100%;
+      z-index: 2;
+      text-align: center;
+      padding: 0 20px;
+      pointer-events: none;
+    }
+    .hero-overlay h1 {
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-weight: 300;
+      letter-spacing: 6px;
+      color: #fff;
+      opacity: 0;
+      transform: translateY(30px);
+      animation: fadeUp 1.2s ease 1.8s forwards;
+    }
+    .hero-overlay h1 span {
+      color: #d4a373;
+      font-weight: 700;
+    }
+    .hero-overlay p {
+      font-size: clamp(0.8rem, 1.2vw, 1.2rem);
+      letter-spacing: 6px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 12px;
+      opacity: 0;
+      animation: fadeUp 1.2s ease 2.4s forwards;
+    }
+    .hero-overlay .scroll-hint {
+      margin-top: 40px;
+      font-size: 0.7rem;
+      letter-spacing: 4px;
+      color: rgba(255, 255, 255, 0.15);
+      animation: bounceDown 2s ease-in-out infinite 3s;
+    }
+
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes bounceDown {
+      0%, 100% { transform: translateY(0); opacity: 0.15; }
+      50% { transform: translateY(10px); opacity: 0.5; }
+    }
+
+    /* ============================================
+       СЕКЦІЯ "THE PRODUCT"
+    ============================================ */
+    .section-product {
+      position: relative;
+      min-height: 100vh;
+      padding: 80px 20px;
+      background: #080814;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+    }
+    .section-product .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .product-feature {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 20px;
+      padding: 30px 20px;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .product-feature::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+                  rgba(212, 163, 115, 0.06) 0%, transparent 70%);
+      opacity: 0;
+      transition: opacity 0.5s;
+      pointer-events: none;
+    }
+    .product-feature:hover {
+      transform: translateY(-8px);
+      border-color: rgba(212, 163, 115, 0.2);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+    }
+    .product-feature:hover::before { opacity: 1; }
+    .product-feature .num {
+      font-size: 0.7rem;
+      color: #d4a373;
+      letter-spacing: 2px;
+      font-weight: 500;
+    }
+    .product-feature h3 {
+      font-size: 1.1rem;
+      font-weight: 400;
+      margin: 10px 0 6px;
+      letter-spacing: 1px;
+    }
+    .product-feature p {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.3);
+      line-height: 1.5;
+    }
+
+    .section-title {
+      font-size: clamp(1.8rem, 4vw, 3rem);
+      font-weight: 300;
+      letter-spacing: 4px;
+      text-align: center;
+    }
+    .section-title span {
+      color: #d4a373;
+    }
+
+    /* ============================================
+       СЕКЦІЯ "WHERE ARE YOU GOING?"
+    ============================================ */
+    .section-journey {
+      min-height: 100vh;
+      padding: 80px 20px;
+      background: #0c0c1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 50px;
+    }
+    .journey-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1000px;
+      width: 100%;
+    }
+    .journey-card {
+      flex: 1 1 200px;
+      min-width: 160px;
+      padding: 40px 20px;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 24px;
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      position: relative;
+    }
+    .journey-card:hover {
+      transform: scale(1.06);
+      border-color: #d4a373;
+      box-shadow: 0 0 60px rgba(212, 163, 115, 0.08);
+      background: rgba(212, 163, 115, 0.04);
+    }
+    .journey-card .icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 16px;
+    }
+    .journey-card h3 {
+      font-weight: 400;
+      letter-spacing: 2px;
+    }
+    .journey-card p {
+      font-size: 0.7rem;
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: 2px;
+      margin-top: 6px;
+      text-transform: uppercase;
+    }
+
+    /* ============================================
+       КАТАЛОГ (GOLD CARDS)
+    ============================================ */
+    .section-catalog {
+      padding: 80px 20px 100px;
+      background: #080814;
+    }
+    .catalog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 30px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .catalog-card {
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 28px;
+      padding: 30px 20px 25px;
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      text-align: center;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .catalog-card::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 28px;
+      padding: 1px;
+      background: conic-gradient(from var(--angle, 0deg),
+                  transparent 0%, rgba(212, 163, 115, 0.2) 40%, transparent 80%);
+      -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events: none;
+      transition: all 1.5s linear;
+    }
+    .catalog-card:hover::after {
+      --angle: 360deg;
+    }
+    .catalog-card:hover {
+      transform: translateY(-10px) scale(1.02);
+      background: rgba(255, 255, 255, 0.05);
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    }
+    .catalog-card .emoji {
+      font-size: 3.8rem;
+      display: block;
+      margin-bottom: 12px;
+    }
+    .catalog-card h4 {
+      font-weight: 400;
+      font-size: 1rem;
+      letter-spacing: 1px;
+    }
+    .catalog-card .price {
+      color: #d4a373;
+      font-weight: 600;
+      font-size: 1.1rem;
+      margin-top: 8px;
+    }
+    .catalog-card .gold-shine {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
+                  rgba(212, 163, 115, 0.06) 0%, transparent 70%);
       pointer-events: none;
       opacity: 0;
       transition: opacity 0.5s;
     }
-    .product-card:hover .glow { opacity: 1; }
+    .catalog-card:hover .gold-shine { opacity: 1; }
 
-    /* ===== АНІМАЦІЇ ===== */
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-40px); }
-      to { opacity: 1; transform: translateY(0); }
+    /* ============================================
+       FINAL
+    ============================================ */
+    .section-final {
+      min-height: 80vh;
+      background: #080814;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 20px;
+      border-top: 1px solid rgba(212, 163, 115, 0.05);
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
+    .section-final h2 {
+      font-size: clamp(2rem, 5vw, 4rem);
+      font-weight: 300;
+      letter-spacing: 4px;
+    }
+    .section-final h2 span {
+      color: #d4a373;
+    }
+    .section-final p {
+      color: rgba(255, 255, 255, 0.2);
+      letter-spacing: 6px;
+      font-size: 0.8rem;
+      margin-top: 16px;
+    }
+    .section-final .btn {
+      margin-top: 40px;
+      padding: 14px 48px;
+      border: 1px solid rgba(212, 163, 115, 0.2);
+      border-radius: 60px;
+      background: transparent;
+      color: #d4a373;
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s;
+      font-family: inherit;
+    }
+    .section-final .btn:hover {
+      background: rgba(212, 163, 115, 0.08);
+      border-color: #d4a373;
+      box-shadow: 0 0 40px rgba(212, 163, 115, 0.1);
+      transform: scale(1.04);
     }
 
-    /* ===== АДАПТИВ ===== */
-    @media (max-width: 600px) {
-      .category-card { width: 140px; padding: 18px; }
-      .category-card .icon { font-size: 2.5rem; }
-      .products { grid-template-columns: repeat(2, 1fr); gap: 15px; }
-      .product-card { padding: 15px; }
-      .product-card .emoji { font-size: 3rem; }
+    /* ============================================
+       АДАПТИВ
+    ============================================ */
+    @media (max-width: 640px) {
+      .cursor, .cursor-dot { display: none; }
+      body { cursor: auto; }
+      .product-feature { padding: 20px; }
+      .journey-card { flex: 1 1 140px; padding: 30px 15px; }
     }
   </style>
 </head>
 <body>
 
-  <!-- ===== 3D СЦЕНА (ФОН) ===== -->
-  <div id="three-canvas"></div>
+  <!-- ==========================================
+  КАСТОМНИЙ КУРСОР
+  ========================================== -->
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-dot" id="cursorDot"></div>
 
-  <!-- ===== ОСНОВНИЙ КОНТЕНТ ===== -->
-  <div class="app">
-
-    <header class="hero">
-      <h1>VIP.<span>ua</span></h1>
-      <p>Шкіряні вироби преміум-класу</p>
-    </header>
-
-    <!-- Категорії -->
-    <section class="categories">
-      <div class="category-card" data-cat="bags">
-        <span class="icon">👜</span>
-        <h3>Сумки</h3>
-        <div class="sub">
-          <span>Жіночі</span>
-          <span>Чоловічі</span>
-          <span>Клатчі</span>
-        </div>
-      </div>
-      <div class="category-card" data-cat="suitcases">
-        <span class="icon">🧳</span>
-        <h3>Валізи</h3>
-        <div class="sub">
-          <span>Ручна поклажа</span>
-          <span>Великі</span>
-          <span>Бізнес</span>
-        </div>
-      </div>
-      <div class="category-card" data-cat="accessories">
-        <span class="icon">⌚</span>
-        <h3>Аксесуари</h3>
-        <div class="sub">
-          <span>Ремені</span>
-          <span>Гаманці</span>
-          <span>Портфелі</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- Товари -->
-    <section class="products" id="productGrid">
-      <!-- Картки будуть додані JavaScript -->
-    </section>
-
+  <!-- ==========================================
+  PRELOADER
+  ========================================== -->
+  <div id="preloader">
+    <div class="preloader-logo">
+      <span>V</span>IP
+      <div class="glow-line"></div>
+    </div>
+    <div class="preloader-sub">Collection</div>
+    <div class="preloader-bar"></div>
+    <div class="preloader-percent" id="percent">00%</div>
   </div>
 
-  <!-- ===== ПІДКЛЮЧАЄМО THREE.JS ===== -->
+  <!-- ==========================================
+  HERO — 3D СЦЕНА
+  ========================================== -->
+  <section id="hero">
+    <div id="three-canvas"></div>
+    <div class="hero-overlay">
+      <h1>VIP <span>COLLECTION</span></h1>
+      <p>Move Differently.</p>
+      <div class="scroll-hint">↓ SCROLL TO EXPLORE ↓</div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+  THE PRODUCT
+  ========================================== -->
+  <section class="section-product">
+    <h2 class="section-title">The <span>Product</span></h2>
+    <div class="product-grid" id="productFeatures">
+      <div class="product-feature">
+        <div class="num">01</div>
+        <h3>BODY</h3>
+        <p>Міцний полікарбонат з матовим покриттям</p>
+      </div>
+      <div class="product-feature">
+        <div class="num">02</div>
+        <h3>MOTION</h3>
+        <p>Безшумні колеса з подвійним підшипником</p>
+      </div>
+      <div class="product-feature">
+        <div class="num">03</div>
+        <h3>CONTROL</h3>
+        <p>Алюмінієва телескопічна ручка</p>
+      </div>
+      <div class="product-feature">
+        <div class="num">04</div>
+        <h3>SECURITY</h3>
+        <p>TSA замок з кодовим захистом</p>
+      </div>
+      <div class="product-feature">
+        <div class="num">05</div>
+        <h3>SPACE</h3>
+        <p>Організація з компресійними ременями</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+  WHERE ARE YOU GOING?
+  ========================================== -->
+  <section class="section-journey">
+    <h2 class="section-title">Where are you <span>going</span>?</h2>
+    <div class="journey-grid">
+      <div class="journey-card">
+        <span class="icon">🌆</span>
+        <h3>WEEKEND</h3>
+        <p>коротка подорож</p>
+      </div>
+      <div class="journey-card">
+        <span class="icon">🏢</span>
+        <h3>BUSINESS</h3>
+        <p>відрядження</p>
+      </div>
+      <div class="journey-card">
+        <span class="icon">🌍</span>
+        <h3>LONG TRIP</h3>
+        <p>довга подорож</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================
+  КАТАЛОГ
+  ========================================== -->
+  <section class="section-catalog">
+    <h2 class="section-title" style="margin-bottom:50px;">New <span>Arrivals</span></h2>
+    <div class="catalog-grid" id="catalogGrid">
+      <!-- товари додаються JS -->
+    </div>
+  </section>
+
+  <!-- ==========================================
+  FINAL
+  ========================================== -->
+  <section class="section-final">
+    <h2>Your next journey <br /><span>starts here.</span></h2>
+    <p>VIP COLLECTION</p>
+    <button class="btn" onclick="alert('✨ Ласкаво просимо до VIP COLLECTION!')">
+      Explore collection →
+    </button>
+  </section>
+
+  <!-- ==========================================
+  ПІДКЛЮЧАЄМО THREE.JS
+  ========================================== -->
   <script type="importmap">
     {
       "imports": {
-        "three": "https://unpkg.com/three@0.126.0/build/three.module.js"
+        "three": "https://unpkg.com/three@0.163.0/build/three.module.js"
       }
     }
   </script>
 
-  <!-- ===== ГОЛОВНИЙ СКРИПТ ===== -->
+  <!-- ==========================================
+  ГОЛОВНИЙ СКРИПТ
+  ========================================== -->
   <script type="module">
     // ---------- ІМПОРТИ ----------
     import * as THREE from 'three';
-    import { OrbitControls } from 'https://unpkg.com/three@0.126.0/examples/jsm/controls/OrbitControls.js';
 
-    // ---------- 1. 3D СЦЕНА (ФОН) ----------
-    const container = document.getElementById('three-canvas');
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0a0a);
+    // ---------- 1. КАСТОМНИЙ КУРСОР ----------
+    const cursor = document.getElementById('cursor');
+    const cursorDot = document.getElementById('cursorDot');
+    let mouseX = 0,
+      mouseY = 0;
+    let cursorX = 0,
+      cursorY = 0;
+    let dotX = 0,
+      dotY = 0;
 
-    // Камера
-    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-    camera.position.set(0, 2, 10);
-    camera.lookAt(0, 0, 0);
+    document.addEventListener('mousemove', (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+      // Активуємо курсор на елементах
+      const target = e.target.closest('.product-feature, .journey-card, .catalog-card, .btn');
+      if (target) {
+        cursor.classList.add('active');
+        cursorDot.classList.add('active');
+      } else {
+        cursor.classList.remove('active');
+        cursorDot.classList.remove('active');
+      }
+    });
 
-    // Рендерер
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    container.appendChild(renderer.domElement);
+    // Плавне слідування
+    function updateCursor() {
+      cursorX += (mouseX - cursorX) * 0.12;
+      cursorY += (mouseY - cursorY) * 0.12;
+      dotX += (mouseX - dotX) * 0.25;
+      dotY += (mouseY - dotY) * 0.25;
+      cursor.style.left = cursorX + 'px';
+      cursor.style.top = cursorY + 'px';
+      cursorDot.style.left = dotX + 'px';
+      cursorDot.style.top = dotY + 'px';
+      requestAnimationFrame(updateCursor);
+    }
+    updateCursor();
 
-    // Контролер (щоб можна було покрутити сцену мишкою, але вимкнемо для фону)
-    // Тут не використовуємо, щоб не заважав
+    // ---------- 2. PRELOADER ----------
+    const preloader = document.getElementById('preloader');
+    const percentEl = document.getElementById('percent');
+    let progress = 0;
 
-    // ---------- СВІТЛО ----------
-    const ambientLight = new THREE.AmbientLight(0x404060);
-    scene.add(ambientLight);
+    function updatePreloader() {
+      progress += 1 + Math.random() * 3;
+      if (progress > 100) progress = 100;
+      percentEl.textContent = String(progress).padStart(2, '0') + '%';
+      if (progress < 100) {
+        setTimeout(updatePreloader, 40 + Math.random() * 60);
+      } else {
+        setTimeout(() => {
+          preloader.classList.add('hidden');
+          // Запускаємо 3D після прелоадера
+          initThree();
+        }, 400);
+      }
+    }
+    updatePreloader();
 
-    const dirLight = new THREE.DirectionalLight(0xffeedd, 1.2);
-    dirLight.position.set(5, 10, 7);
-    dirLight.castShadow = true;
-    scene.add(dirLight);
+    // ---------- 3. THREE.JS 3D СЦЕНА ----------
+    let scene, camera, renderer, suitcase;
+    let targetRotationY = 0;
+    let currentRotationY = 0;
 
-    const backLight = new THREE.PointLight(0xd4a373, 0.8, 20);
-    backLight.position.set(-3, 1, -5);
-    scene.add(backLight);
+    function initThree() {
+      const container = document.getElementById('three-canvas');
+      const width = container.clientWidth;
+      const height = container.clientHeight;
 
-    // ---------- 3D ОБ'ЄКТИ: ЛІТАЮЧІ ШКІРЯНІ КЛАПТІ ----------
-    function createFloatingShape(geometry, color, pos, scale = 1) {
-      const mat = new THREE.MeshStandardMaterial({
-        color: color,
-        roughness: 0.6,
-        metalness: 0.1,
-        emissive: color,
-        emissiveIntensity: 0.05,
+      // Сцена
+      scene = new THREE.Scene();
+      scene.background = new THREE.Color(0x080814);
+
+      // Камера
+      camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
+      camera.position.set(0, 1.2, 6);
+      camera.lookAt(0, 0, 0);
+
+      // Рендерер
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(width, height);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.shadowMap.enabled = true;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.2;
+      container.appendChild(renderer.domElement);
+
+      // Світло
+      const ambientLight = new THREE.AmbientLight(0x222244, 0.6);
+      scene.add(ambientLight);
+
+      const dirLight = new THREE.DirectionalLight(0xffeedd, 2);
+      dirLight.position.set(5, 8, 6);
+      dirLight.castShadow = true;
+      scene.add(dirLight);
+
+      const fillLight = new THREE.DirectionalLight(0x4466ff, 0.5);
+      fillLight.position.set(-3, 1, -4);
+      scene.add(fillLight);
+
+      // Золоте підсвічування знизу
+      const goldLight = new THREE.PointLight(0xd4a373, 1.2, 10);
+      goldLight.position.set(0, -2, 2);
+      scene.add(goldLight);
+
+      // ---------- СТВОРЮЄМО 3D ВАЛІЗУ (з геометрій) ----------
+      const group = new THREE.Group();
+
+      // Основний корпус
+      const bodyMat = new THREE.MeshStandardMaterial({
+        color: 0x1a1a2e,
+        roughness: 0.3,
+        metalness: 0.6,
+        emissive: 0x0a0a1a,
+        emissiveIntensity: 0.1
+      });
+      const body = new THREE.Mesh(new THREE.BoxGeometry(2.0, 1.2, 0.8), bodyMat);
+      body.position.y = 0.1;
+      body.castShadow = true;
+      group.add(body);
+
+      // Золоті смуги (кант)
+      const goldMat = new THREE.MeshStandardMaterial({
+        color: 0xd4a373,
+        roughness: 0.2,
+        metalness: 0.8,
+        emissive: 0xd4a373,
+        emissiveIntensity: 0.1
+      });
+      // Верхня смуга
+      const strip1 = new THREE.Mesh(new THREE.BoxGeometry(2.05, 0.04, 0.05), goldMat);
+      strip1.position.set(0, 0.6, 0.43);
+      group.add(strip1);
+      // Нижня смуга
+      const strip2 = new THREE.Mesh(new THREE.BoxGeometry(2.05, 0.04, 0.05), goldMat);
+      strip2.position.set(0, -0.4, 0.43);
+      group.add(strip2);
+
+      // Ручка
+      const handleMat = new THREE.MeshStandardMaterial({
+        color: 0x2a2a3e,
+        roughness: 0.4,
+        metalness: 0.7
+      });
+      const handle = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.7, 8), handleMat);
+      handle.rotation.x = Math.PI / 2;
+      handle.position.set(0, 0.75, 0.15);
+      group.add(handle);
+
+      // Колеса (4 шт)
+      const wheelMat = new THREE.MeshStandardMaterial({
+        color: 0x111122,
+        roughness: 0.8,
+        metalness: 0.2
+      });
+      const wheelPos = [
+        [-0.75, -0.6, 0.35],
+        [0.75, -0.6, 0.35],
+        [-0.75, -0.6, -0.35],
+        [0.75, -0.6, -0.35]
+      ];
+      wheelPos.forEach(pos => {
+        const wheel = new THREE.Mesh(new THREE.CylinderGeometry(0.12, 0.12, 0.06, 12), wheelMat);
+        wheel.rotation.x = Math.PI / 2;
+        wheel.position.set(pos[0], pos[1], pos[2]);
+        group.add(wheel);
+        // обідок золотий
+        const rim = new THREE.Mesh(new THREE.TorusGeometry(0.12, 0.02, 8, 12), goldMat);
+        rim.rotation.x = Math.PI / 2;
+        rim.position.set(pos[0], pos[1], pos[2]);
+        group.add(rim);
+      });
+
+      // Замок (золотий квадрат)
+      const lock = new THREE.Mesh(new THREE.BoxGeometry(0.1, 0.08, 0.02), goldMat);
+      lock.position.set(0.4, 0.2, 0.41);
+      group.add(lock);
+
+      scene.add(group);
+      suitcase = group;
+
+      // ---------- ЗОЛОТІ ЛІНІЇ (ОРБІТА) ----------
+      const points = [];
+      const radius = 1.8;
+      for (let i = 0; i <= 64; i++) {
+        const angle = (i / 64) * Math.PI * 2;
+        points.push(new THREE.Vector3(
+          Math.cos(angle) * radius,
+          Math.sin(angle) * radius * 0.4,
+          Math.sin(angle * 0.7) * 0.5
+        ));
+      }
+      const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+      const lineMat = new THREE.LineBasicMaterial({
+        color: 0xd4a373,
         transparent: true,
-        opacity: 0.7
+        opacity: 0.15,
+        linewidth: 1
       });
-      const mesh = new THREE.Mesh(geometry, mat);
-      mesh.position.set(pos.x, pos.y, pos.z);
-      mesh.scale.set(scale, scale, scale);
-      mesh.castShadow = true;
-      mesh.userData = {
-        speed: 0.2 + Math.random() * 0.3,
-        rotSpeed: 0.005 + Math.random() * 0.01,
-        offset: Math.random() * 100
-      };
-      scene.add(mesh);
-      return mesh;
+      const orbitLine = new THREE.Line(lineGeo, lineMat);
+      scene.add(orbitLine);
+
+      // ---------- РЕАКЦІЯ НА МИШУ ----------
+      document.addEventListener('mousemove', (e) => {
+        const x = (e.clientX / window.innerWidth - 0.5) * 2;
+        targetRotationY = x * 0.4;
+        // Золоте світло рухається за курсором
+        goldLight.position.x = x * 1.5;
+        goldLight.position.z = 2 + x * 0.5;
+      });
+
+      // ---------- АНІМАЦІЙНИЙ ЦИКЛ ----------
+      function animate() {
+        requestAnimationFrame(animate);
+
+        // Плавне обертання валізи
+        currentRotationY += (targetRotationY - currentRotationY) * 0.05;
+        if (suitcase) {
+          suitcase.rotation.y = currentRotationY + Math.sin(Date.now() * 0.0003) * 0.05;
+          suitcase.position.y = Math.sin(Date.now() * 0.0005) * 0.04;
+        }
+
+        // Обертання золотої лінії
+        if (orbitLine) {
+          orbitLine.rotation.y += 0.001;
+          orbitLine.rotation.x = Math.sin(Date.now() * 0.0002) * 0.05;
+        }
+
+        renderer.render(scene, camera);
+      }
+      animate();
+
+      // ---------- АДАПТИВ ----------
+      window.addEventListener('resize', () => {
+        const w = container.clientWidth;
+        const h = container.clientHeight;
+        camera.aspect = w / h;
+        camera.updateProjectionMatrix();
+        renderer.setSize(w, h);
+      });
+
+      // ---------- СВІТЛО НА КАРТКАХ (МИША) ----------
+      document.querySelectorAll('.product-feature, .catalog-card, .journey-card').forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+          const rect = el.getBoundingClientRect();
+          const x = ((e.clientX - rect.left) / rect.width) * 100;
+          const y = ((e.clientY - rect.top) / rect.height) * 100;
+          el.style.setProperty('--mx', x + '%');
+          el.style.setProperty('--my', y + '%');
+        });
+      });
     }
 
-    // Створюємо різні фігури
-    const shapes = [];
-    const colors = [0xd4a373, 0x8b6b4d, 0x2c1810, 0xb8860b, 0x4a3520];
-    const geometries = [
-      new THREE.BoxGeometry(0.6, 0.1, 0.4),
-      new THREE.CylinderGeometry(0.3, 0.3, 0.1, 6),
-      new THREE.SphereGeometry(0.25, 8, 8),
-      new THREE.TorusGeometry(0.2, 0.08, 8, 12),
-    ];
-
-    for (let i = 0; i < 25; i++) {
-      const geo = geometries[i % geometries.length];
-      const col = colors[Math.floor(Math.random() * colors.length)];
-      const pos = {
-        x: (Math.random() - 0.5) * 12,
-        y: (Math.random() - 0.5) * 8 + 1,
-        z: (Math.random() - 0.5) * 8 - 3
-      };
-      const scale = 0.5 + Math.random() * 1.2;
-      const mesh = createFloatingShape(geo, col, pos, scale);
-      shapes.push(mesh);
-    }
-
-    // ---------- ЦЕНТРАЛЬНИЙ 3D-ЕЛЕМЕНТ (СУМКА-СИМВОЛ) ----------
-    // Робимо просту композицію з геометрій, що нагадує сумку
-    const bagGroup = new THREE.Group();
-    bagGroup.position.set(0, 0.5, 0);
-
-    // Корпус (основа)
-    const bodyMat = new THREE.MeshStandardMaterial({
-      color: 0x3d2314,
-      roughness: 0.4,
-      metalness: 0.1,
-      emissive: 0x2c1810,
-      emissiveIntensity: 0.1
-    });
-    const body = new THREE.Mesh(new THREE.BoxGeometry(1.6, 0.8, 0.5), bodyMat);
-    body.position.y = 0.1;
-    body.castShadow = true;
-    bagGroup.add(body);
-
-    // Ручка (тор)
-    const handleMat = new THREE.MeshStandardMaterial({
-      color: 0x8b6b4d,
-      roughness: 0.7,
-      metalness: 0.05
-    });
-    const handle = new THREE.Mesh(new THREE.TorusGeometry(0.4, 0.08, 8, 12), handleMat);
-    handle.position.set(0, 0.5, 0);
-    handle.rotation.x = Math.PI / 2;
-    bagGroup.add(handle);
-
-    // Блиск (маленька сфера)
-    const glitter = new THREE.Mesh(
-      new THREE.SphereGeometry(0.06, 6, 6),
-      new THREE.MeshStandardMaterial({ color: 0xd4a373, emissive: 0xd4a373, emissiveIntensity: 0.8 })
-    );
-    glitter.position.set(0.5, 0.3, 0.3);
-    bagGroup.add(glitter);
-
-    scene.add(bagGroup);
-
-    // ---------- МИШКА ДЛЯ СВІТЛА НА КАРТКАХ ----------
-    document.querySelectorAll('.product-card, .category-card').forEach(el => {
-      el.addEventListener('mousemove', (e) => {
-        const rect = el.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        el.style.setProperty('--mx', x + '%');
-        el.style.setProperty('--my', y + '%');
-      });
-    });
-
-    // ---------- ГЕНЕРАЦІЯ ТОВАРІВ ----------
+    // ---------- 4. ГЕНЕРАЦІЯ ТОВАРІВ ----------
     const products = [
-      { name: 'Класична сумка', emoji: '👜', price: '12 900 ₴' },
-      { name: 'Дорожня валіза', emoji: '🧳', price: '18 500 ₴' },
-      { name: 'Шкіряний портфель', emoji: '💼', price: '14 200 ₴' },
-      { name: 'Клатч вечірній', emoji: '👝', price: '8 700 ₴' },
-      { name: 'Ремінь натуральний', emoji: '🎀', price: '3 400 ₴' },
-      { name: 'Гаманець преміум', emoji: '👛', price: '5 100 ₴' },
-      { name: 'Сумка-месенджер', emoji: '🎒', price: '11 300 ₴' },
-      { name: 'Валіза бізнес', emoji: '💎', price: '24 900 ₴' },
+      { name: 'Cabin S', emoji: '🧳', price: '12 900 ₴' },
+      { name: 'Business M', emoji: '💼', price: '18 500 ₴' },
+      { name: 'Weekender', emoji: '👜', price: '14 200 ₴' },
+      { name: 'Travel L', emoji: '🎒', price: '21 700 ₴' },
+      { name: 'Leather Belt', emoji: '🎀', price: '3 400 ₴' },
+      { name: 'Wallet Premium', emoji: '👛', price: '5 100 ₴' },
     ];
 
-    const grid = document.getElementById('productGrid');
+    const grid = document.getElementById('catalogGrid');
     products.forEach(p => {
       const card = document.createElement('div');
-      card.className = 'product-card';
+      card.className = 'catalog-card';
       card.innerHTML = `
-        <div class="glow"></div>
+        <div class="gold-shine"></div>
         <span class="emoji">${p.emoji}</span>
         <h4>${p.name}</h4>
         <div class="price">${p.price}</div>
       `;
-      grid.appendChild(card);
-    });
-
-    // ---------- АНІМАЦІЙНИЙ ЦИКЛ ----------
-    let clock = new THREE.Clock();
-
-    function animate() {
-      const time = clock.getElapsedTime();
-
-      // Рух літаючих фігур
-      shapes.forEach((mesh, i) => {
-        const data = mesh.userData;
-        mesh.position.x += Math.sin(time * data.speed + data.offset) * 0.001;
-        mesh.position.y += Math.cos(time * data.speed * 0.7 + data.offset) * 0.001;
-        mesh.rotation.x += data.rotSpeed;
-        mesh.rotation.y += data.rotSpeed * 0.7;
-      });
-
-      // Обертання сумки-символу
-      bagGroup.rotation.y = Math.sin(time * 0.2) * 0.3;
-      bagGroup.position.y = 0.5 + Math.sin(time * 0.5) * 0.1;
-
-      // Рендер
-      renderer.render(scene, camera);
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    // ---------- АДАПТИВ ----------
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth / window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
-
-    // ---------- ДОДАТКОВИЙ ЕФЕКТ: МІНІ-ГРА "ПОТЯГНИ СУМКУ" ----------
-    // (Спрощена версія: при кліку на товар з'являється сповіщення)
-    document.querySelectorAll('.product-card').forEach((card, idx) => {
       card.addEventListener('click', () => {
-        const name = card.querySelector('h4').innerText;
-        // Проста "гра" - емуляція вибору
         card.style.transition = 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)';
-        card.style.transform = 'scale(1.2) rotate(3deg)';
-        card.style.boxShadow = '0 0 80px rgba(212,163,115,0.4)';
+        card.style.transform = 'scale(1.15)';
+        card.style.boxShadow = '0 0 80px rgba(212,163,115,0.2)';
         setTimeout(() => {
           card.style.transform = '';
           card.style.boxShadow = '';
-        }, 500);
-        alert(`🎉 Ви обрали: ${name}! Цей товар додано до віртуальної вітрини.`);
+        }, 400);
+        alert(`✨ VIP обрано: ${p.name}`);
       });
+      grid.appendChild(card);
     });
 
-    console.log('🚀 VIP.ua 3D Бутик завантажено! Все грає, світиться та літає.');
+    // ---------- 5. SCROLL-ХОРЕОГРАФІЯ (проста) ----------
+    // Додаємо класи при прокрутці для плавних появи
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.section-product, .section-journey, .section-catalog, .section-final').forEach(el => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(40px)';
+      el.style.transition = 'opacity 0.9s ease, transform 0.9s ease';
+      observer.observe(el);
+    });
+
+    // Якщо секції вже видимі після завантаження
+    setTimeout(() => {
+      document.querySelectorAll('.section-product, .section-journey, .section-catalog, .section-final').forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.top < window.innerHeight) {
+          el.style.opacity = '1';
+          el.style.transform = 'translateY(0)';
+        }
+      });
+    }, 500);
+
+    console.log('👑 VIP COLLECTION — ULTRA PREMIUM ДОСВІД ЗАВАНТАЖЕНО!');
   </script>
 </body>
 </html>
